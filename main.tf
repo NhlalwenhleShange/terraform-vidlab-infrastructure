@@ -16,7 +16,7 @@ variable "location" {
 }
 
 variable "prefix" {
-  default = "vidlab"
+  default = "vidlab02"
 }
 
 variable "tags" {
