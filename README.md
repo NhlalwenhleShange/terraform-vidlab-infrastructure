@@ -1,4 +1,4 @@
-# VidLab Infrastructure
+# VidLab Infrastructure Code
 
 This is the Terraform setup for the cloud backend of my video-to-picture app. Instead of clicking around the Azure portal, this script provisions all the required resources in one go.
 
