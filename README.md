@@ -1,15 +1,47 @@
-# VidLab Infrastructure Code
+# VidLab — Azure Infrastructure
 
-This is the Terraform setup for the cloud backend of my video-to-picture app. Instead of clicking around the Azure portal, this script provisions all the required resources in one go.
+Terraform configuration that provisions the Azure infrastructure
+for the VidLab video frame extraction service.
 
-## What it deploys:
-- **Resource Group** (`rg-vidlab-prod`)
-- **Azure Container Registry** (`vidlabacrprod01`) for storing Docker images
-- **Storage Account** (`vidlabstprod01`) with two private containers: `videos` and `frames`
-- **Container Apps Environment** + **Log Analytics** to host and monitor the app
+## Architecture
 
-## How to use it:
+The following resources are provisioned:
 
-Make sure you have Terraform and the Azure CLI installed, then log in:
-```bash
-az login
+- Azure Resource Group (`rg-vidlab02-prod`)
+- Azure Container Registry (`vidlab02acrprod01`)
+- Azure Container App Environment (`cae-vidlab02-prod`)
+- Azure Container App (`app-vidlab02-prod`) — service running the VidLab image
+
+## Usage
+
+\`\`\`bash
+terraform init
+terraform plan
+terraform apply
+\`\`\`
+
+## Variables
+
+| Name | Description | Default |
+|------|-------------|---------|
+| `prefix` | Resource name prefix | `vidlab02` |
+| `location` | Azure region | `southafricanorth` |
+| `tags` | Common resource tags | see `variables.tf` |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| `container_app_url` | Public HTTPS URL of the deployed app |
+| `acr_login_server` | ACR login server hostname |
+
+## Notes
+
+- The Container App is provisioned with a placeholder image.
+  Real deployments are done by the app repo's CI/CD pipeline.
+- A `lifecycle { ignore_changes = [template[0].container[0].image] }`
+  block prevents Terraform from reverting manual deploys.
+
+## Related
+
+- Application repo: `github.com/NhlalwenhleShange/vidlab-app`
